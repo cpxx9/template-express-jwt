@@ -1,6 +1,6 @@
 const db = require('./pool');
 
-module.exports.addToDb = async (
+module.exports.addToUsersDb = async (
   firstname,
   lastname,
   email,
@@ -10,7 +10,7 @@ module.exports.addToDb = async (
   member = false
 ) => {
   await db.query(
-    'INSERT INTO users (firstname, lastname, email, admin, member, hash, salt) VALUES ($1, $2, $3, $4, $5, $6, $7,)',
+    'INSERT INTO users (firstname, lastname, email, admin, member, hash, salt) VALUES ($1, $2, $3, $4, $5, $6, $7)',
     [firstname, lastname, email, admin, member, hash, salt]
   );
 };
