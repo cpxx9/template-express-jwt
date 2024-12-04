@@ -7,6 +7,7 @@ const passport = require('passport');
 const PgSession = require('connect-pg-simple')(session);
 const pgPool = require('./models/pool');
 const { indexRouter } = require('./routes/indexRouter');
+const { loginRouter } = require('./routes/loginRouter');
 
 const assetsPath = path.join(__dirname, 'views');
 const app = express();
@@ -29,6 +30,7 @@ app.use(passport.session());
 
 // Routes Here
 app.use('/', indexRouter);
+app.use('/login', loginRouter);
 
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
