@@ -28,9 +28,9 @@ const validateUser = [
     .trim()
     .isLength({ min: 8, max: 32 })
     .withMessage(`Password ${passLengthErr}`),
-  body('confirmPassword').custom(
-    (value, { req }) => value === req.body.password
-  ),
+  body('confirmPassword')
+    .custom((value, { req }) => value === req.body.password)
+    .withMessage(passMatchErr),
 ];
 
 const postNewUser = [
