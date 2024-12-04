@@ -19,3 +19,11 @@ module.export.getAllUsers = async () => {
   const { rows } = await db.query('SELECT * FROM users');
   return rows;
 };
+
+module.exports.getUserById = async (userId) => {
+  const { rows } = await db.query(
+    'SELECT * FROM messages WHERE message_id = $1',
+    [userId]
+  );
+  return rows[0];
+};
