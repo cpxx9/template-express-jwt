@@ -4,7 +4,7 @@ const checkIfLoggedIn = async (req, res, next) => {
   if (req.isAuthenticated()) {
     next();
   } else {
-    res.redirect(401, '/login');
+    res.redirect('/login');
   }
 };
 
