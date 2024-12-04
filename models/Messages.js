@@ -15,7 +15,7 @@ module.exports.getMessageById = async (messageId) => {
   return rows[0];
 };
 
-module.export.getAllMessages = async () => {
+module.exports.getAllMessages = async () => {
   const { rows } = await db.query('SELECT * FROM messages');
   return rows;
 };
