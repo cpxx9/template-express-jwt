@@ -9,8 +9,8 @@ CREATE TABLE IF NOT EXISTS users (
   firstname VARCHAR ( 255 ),
   lastname VARCHAR ( 255 ),
   email VARCHAR ( 255 ),
-  admin BOOLEAN,
-  member BOOLEAN,
+  admin BOOLEAN DEFAULT FALSE,
+  member BOOLEAN DEFAULT FALSE,
   hash TEXT,
   salt TEXT,
   CONSTRAINT users_pkey PRIMARY KEY (user_id)
