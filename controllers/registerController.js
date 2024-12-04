@@ -1,7 +1,10 @@
-const registerController = (req, res) => {
+const displayRegistration = (req, res) => {
   res.render('register');
 };
 
+const postNewUser = () => {};
+
 module.exports = {
-  registerController,
+  displayRegistration,
+  postNewUser,
 };
