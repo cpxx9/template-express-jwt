@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS users (
   user_id INTEGER GENERATED ALWAYS AS IDENTITY,
   firstname VARCHAR ( 255 ),
   lastname VARCHAR ( 255 ),
-  email VARCHAR ( 255 ),
+  email VARCHAR ( 255 ) UNIQUE,
   admin BOOLEAN DEFAULT FALSE,
   member BOOLEAN DEFAULT FALSE,
   hash TEXT,
