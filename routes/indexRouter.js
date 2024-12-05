@@ -1,8 +1,6 @@
 const { Router } = require('express');
-const {
-  checkIfLoggedIn,
-  displayMessages,
-} = require('../controllers/indexController');
+const { displayMessages } = require('../controllers/indexController');
+const { checkIfLoggedIn } = require('../utils/auth');
 
 const indexRouter = Router();
 

@@ -13,14 +13,14 @@ const verifyCallback = async (email, password, done) => {
     console.log(user);
 
     if (!user) {
-      return done(null, false, { message: 'incorrect email address' });
+      return done(null, false, { message: 'incorrect email or password' });
     }
 
     const isValid = validPassword(password, user.hash, user.salt);
     if (isValid) {
       return done(null, user);
     }
-    return done(null, false, { message: 'incorrect password' });
+    return done(null, false, { message: 'incorrect email or password' });
   } catch (err) {
     return done(err);
   }
