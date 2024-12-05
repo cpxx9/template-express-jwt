@@ -10,6 +10,7 @@ const { indexRouter } = require('./routes/indexRouter');
 const { loginRouter } = require('./routes/loginRouter');
 const { registerRouter } = require('./routes/registerRouter');
 const { joinClubRouter } = require('./routes/joinClubRouter');
+const { notFound } = require('./utils/auth');
 
 const assetsPath = path.join(__dirname, 'views');
 const app = express();
@@ -36,6 +37,14 @@ app.use('/', indexRouter);
 app.use('/login', loginRouter);
 app.use('/register', registerRouter);
 app.use('/join-club', joinClubRouter);
+app.use('*', notFound);
+app.use((err, req, res, next) => {
+  res.status(err.statusCode || 500).render('error-page', {
+    title: err.name,
+    status: err.statusCode,
+    message: err.message,
+  });
+});
 
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);

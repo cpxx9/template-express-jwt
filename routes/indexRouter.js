@@ -1,10 +1,17 @@
 const { Router } = require('express');
 const { displayMessages } = require('../controllers/indexController');
-const { checkIfLoggedIn } = require('../utils/auth');
 
 const indexRouter = Router();
 
-indexRouter.get('/', checkIfLoggedIn, displayMessages);
+const checkLoggedIn = (req, res, next) => {
+  if (req.isAuthenticated()) {
+    next();
+  } else {
+    res.redirect('/login');
+  }
+};
+
+indexRouter.get('/', checkLoggedIn, displayMessages);
 indexRouter.get('/logout', async (req, res, next) => {
   req.logout((err) => {
     if (err) {
