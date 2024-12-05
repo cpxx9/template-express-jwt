@@ -10,7 +10,6 @@ const verifyCallback = async (email, password, done) => {
       [email]
     );
     const user = rows[0];
-    console.log(user);
 
     if (!user) {
       return done(null, false, { message: 'incorrect email or password' });
