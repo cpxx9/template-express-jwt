@@ -12,6 +12,7 @@ const { registerRouter } = require('./routes/registerRouter');
 const { joinClubRouter } = require('./routes/joinClubRouter');
 const { notFound } = require('./utils/auth');
 const { errorController } = require('./errors/errorController');
+const { admninsOnlyRouter } = require('./routes/adminsOnlyRouter');
 
 const assetsPath = path.join(__dirname, 'views');
 const app = express();
@@ -38,6 +39,7 @@ app.use('/', indexRouter);
 app.use('/login', loginRouter);
 app.use('/register', registerRouter);
 app.use('/join-club', joinClubRouter);
+app.use('/admins-only', admninsOnlyRouter);
 app.use('*', notFound);
 app.use(errorController);
 
