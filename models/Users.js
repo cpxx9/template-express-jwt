@@ -15,7 +15,7 @@ module.exports.addToUsersDb = async (
   );
 };
 
-module.export.getAllUsers = async () => {
+module.exports.getAllUsers = async () => {
   const { rows } = await db.query('SELECT * FROM users');
   return rows;
 };

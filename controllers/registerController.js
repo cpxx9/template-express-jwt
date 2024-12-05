@@ -1,7 +1,7 @@
 const { body, validationResult } = require('express-validator');
 const { nextTick } = require('process');
 const { genPassword } = require('../utils/passwordUtils');
-const pool = require('../models/pool');
+const { addToUsersDb } = require('../models/Users');
 
 const displayRegistration = (req, res) => {
   res.render('register');
@@ -46,9 +46,12 @@ const postNewUser = [
 
     const { salt, hash } = genPassword(req.body.password);
     try {
-      await pool.query(
-        'INSERT INTO users (firstname, lastname, email, hash, salt) VALUES ($1, $2, $3, $4, $5)',
-        [req.body.firstname, req.body.lastname, req.body.email, hash, salt]
+      await addToUsersDb(
+        req.body.firstname,
+        req.body.lastname,
+        req.body.email,
+        hash,
+        salt
       );
       res.redirect('/login');
     } catch (err) {
