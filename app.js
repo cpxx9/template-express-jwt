@@ -9,6 +9,7 @@ const pgPool = require('./models/pool');
 const { indexRouter } = require('./routes/indexRouter');
 const { loginRouter } = require('./routes/loginRouter');
 const { registerRouter } = require('./routes/registerRouter');
+const { joinClubRouter } = require('./routes/joinClubRouter');
 
 const assetsPath = path.join(__dirname, 'views');
 const app = express();
@@ -34,6 +35,7 @@ app.use(passport.session());
 app.use('/', indexRouter);
 app.use('/login', loginRouter);
 app.use('/register', registerRouter);
+app.use('/join-club', joinClubRouter);
 
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
