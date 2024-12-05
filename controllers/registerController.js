@@ -1,4 +1,7 @@
 const { body, validationResult } = require('express-validator');
+const { nextTick } = require('process');
+const { genPassword } = require('../utils/passwordUtils');
+const pool = require('../models/pool');
 
 const displayRegistration = (req, res) => {
   res.render('register');
@@ -35,13 +38,22 @@ const validateUser = [
 
 const postNewUser = [
   validateUser,
-  async (req, res) => {
+  async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).render('register', { errors: errors.array() });
     }
-    const { firstname, lastname, email, password } = req.body;
-    res.redirect('/login');
+
+    const { salt, hash } = genPassword(req.body.password);
+    try {
+      await pool.query(
+        'INSERT INTO users (firstname, lastname, email, hash, salt) VALUES ($1, $2, $3, $4, $5)',
+        [req.body.firstname, req.body.lastname, req.body.email, hash, salt]
+      );
+      res.redirect('/login');
+    } catch (err) {
+      return next(err);
+    }
   },
 ];
 
