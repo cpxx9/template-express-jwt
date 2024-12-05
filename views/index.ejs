@@ -7,6 +7,20 @@
   </head>
   <body>
     <h1>Messages</h1>
+    <% if (Array.isArray(locals.messages)) { %> <% messages.forEach(message => {
+    %>
+    <ul>
+      <li><h3><%= message.title %></h3></li>
+      <% if (member) { %>
+      <li><%= message.created %></li>
+      <li><%= getUserName(message.user_id)%></li>
+      <% } %>
+      <li><p><%= message.message %></p></li>
+      <li></li>
+    </ul>
+
+    <% }) %> <% } %>
+
     <a href="/logout">Logout</a>
     <a href="/join-club">Join the club!</a>
   </body>

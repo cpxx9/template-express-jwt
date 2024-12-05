@@ -7,6 +7,16 @@ module.exports.addToMessagesDb = async (userId, title, text) => {
   );
 };
 
+module.exports.getUsersName = async (userId) => {
+  const { rows } = await db.query(
+    'SELECT users.firstname, users.lastname FROM messages JOIN users ON messages.user_id = users.user_id WHERE users.user_id = $1',
+    [userId]
+  );
+  const firstLast = rows[0];
+  const name = `${firstLast.firstname} ${firstLast.lastname}`;
+  return name;
+};
+
 module.exports.getMessageById = async (messageId) => {
   const { rows } = await db.query(
     'SELECT * FROM messages WHERE message_id = $1',
