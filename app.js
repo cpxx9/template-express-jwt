@@ -24,7 +24,8 @@ app.use(
     store: new PgSession({ pool: pgPool }),
     secret: process.env.SECRET,
     resave: false,
-    saveUninitialized: false,
+    saveUninitialized: true,
+    cookie: { maxAge: 24 * 60 * 60 * 1000 },
   })
 );
 app.use(passport.session());
