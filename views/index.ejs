@@ -9,19 +9,22 @@
     <h1>Messages</h1>
     <a href="/new-message">New message</a>
     <br />
-    <% if (Array.isArray(locals.messages)) { %> <% messages.forEach(message => {
-    %>
+    <% if (Array.isArray(locals.messages)) { %>
     <ul>
-      <li><h3><%= message.title %></h3></li>
-      <% if (member) { %>
-      <li><%= message.created %></li>
-      <li><%= getUserName(message.user_id)%></li>
-      <% } %>
-      <li><p><%= message.message %></p></li>
-      <li></li>
+      <li>
+        <% messages.forEach(message => { %>
+        <ul>
+          <li><h3><%= message.title %></h3></li>
+          <% if (member) { %>
+          <li><%= message.created %></li>
+          <li><%= message.firstname %> <%= message.lastname %></li>
+          <% } %>
+          <li><p><%= message.text %></p></li>
+        </ul>
+        <% }) %>
+      </li>
     </ul>
-
-    <% }) %> <% } %>
+    <% } %>
 
     <a href="/logout">Logout</a>
     <a href="/join-club">Join the club!</a>
