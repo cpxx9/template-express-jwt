@@ -26,6 +26,13 @@ module.exports.getMessageById = async (messageId) => {
 };
 
 module.exports.getAllMessages = async () => {
-  const { rows } = await db.query('SELECT * FROM messages');
+  const { rows } = await db.query('SELECT title, text FROM messages');
+  return rows;
+};
+
+module.exports.getAllMessagesMember = async () => {
+  const { rows } = await db.query(
+    'SELECT users.firstname, users.lastname, messages.created, messages.title, messages.text FROM messages JOIN users ON messages.user_id = users.user_id'
+  );
   return rows;
 };

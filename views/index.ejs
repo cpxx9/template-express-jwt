@@ -14,11 +14,12 @@
       <li>
         <% messages.forEach(message => { %>
         <ul>
-          <li><h3><%= message.title %></h3></li>
-          <% if (member) { %>
+          <% if (message.created) { %>
           <li><%= message.created %></li>
+          <% } %> <% if (message.firstname) { %>
           <li><%= message.firstname %> <%= message.lastname %></li>
           <% } %>
+          <li><h3><%= message.title %></h3></li>
           <li><p><%= message.text %></p></li>
         </ul>
         <% }) %>
