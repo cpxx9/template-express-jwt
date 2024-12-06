@@ -1,8 +1,12 @@
+require('dotenv/config');
 const { body, validationResult } = require('express-validator');
 const { makeUserMember } = require('../models/Users');
 
 const validateSecret = [
-  body('secretPhrase').trim().matches(/pool/).withMessage('Incorrect secret!'),
+  body('secretPhrase')
+    .trim()
+    .matches(process.env.CLUB_SECRET)
+    .withMessage('Incorrect secret!'),
 ];
 
 const getJoinClubPage = (req, res) => {
