@@ -9,6 +9,10 @@ const getJoinClubPage = (req, res) => {
   res.render('join-club');
 };
 
+const getJoinClubSuccessPage = (req, res) => {
+  res.render('join-club-success');
+};
+
 const joinClubPost = [
   validateSecret,
   async (req, res, next) => {
@@ -19,7 +23,7 @@ const joinClubPost = [
 
     try {
       await makeUserMember(req.user.user_id);
-      res.send('Success');
+      res.redirect('/join-club/success');
     } catch (err) {
       return next(err);
     }
@@ -28,5 +32,6 @@ const joinClubPost = [
 
 module.exports = {
   getJoinClubPage,
+  getJoinClubSuccessPage,
   joinClubPost,
 };
