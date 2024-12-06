@@ -1,10 +1,14 @@
 const { Router } = require('express');
-const { getJoinClubPage } = require('../controllers/joinClubController');
+const {
+  getJoinClubPage,
+  joinClubPost,
+} = require('../controllers/joinClubController');
 const { checkIfLoggedIn } = require('../utils/auth');
 
 const joinClubRouter = new Router();
 
 joinClubRouter.get('/', checkIfLoggedIn, getJoinClubPage);
+joinClubRouter.post('/', joinClubPost);
 
 module.exports = {
   joinClubRouter,
