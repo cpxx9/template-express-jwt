@@ -7,6 +7,7 @@
   </head>
   <body>
     <h1>Join the Club</h1>
+    <%- include("partials/join-club-error.ejs") %>
     <form action="/join-club" method="post">
       <label for="secretPhrase">Secret: </label>
       <input type="password" name="secretPhrase" id="secretPhrase" />
