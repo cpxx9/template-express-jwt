@@ -27,3 +27,7 @@ module.exports.getUserById = async (userId) => {
   );
   return rows[0];
 };
+
+module.exports.makeUserMember = async (userId) => {
+  await db.query('UPDATE users SET member = true WHERE user_id = $1', [userId]);
+};
