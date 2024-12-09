@@ -17,14 +17,6 @@ const checkIfLoggedIn = asyncHandler(async (req, res, next) => {
   }
 });
 
-const checkIfMember = asyncHandler(async (req, res, next) => {
-  if (req.user.member) {
-    next();
-  } else {
-    throw new CustomForbiddenError('Only members can view this content');
-  }
-});
-
 const checkIfAdmin = asyncHandler(async (req, res, next) => {
   if (req.user.admin) {
     next();
@@ -37,5 +29,4 @@ module.exports = {
   checkIfLoggedIn,
   notFound,
   checkIfAdmin,
-  checkIfMember,
 };

@@ -1,7 +1,8 @@
 const { body, validationResult } = require('express-validator');
-const { nextTick } = require('process');
+const { PrismaClient } = require('@prisma/client');
 const { genPassword } = require('../utils/passwordUtils');
-const { addToUsersDb } = require('../models/Users');
+
+const prisma = new PrismaClient();
 
 const displayRegistration = (req, res) => {
   res.render('register');
@@ -46,14 +47,16 @@ const postNewUser = [
 
     const { salt, hash } = genPassword(req.body.password);
     try {
-      await addToUsersDb(
-        req.body.firstname,
-        req.body.lastname,
-        req.body.email,
-        hash,
-        salt
-      );
-      res.redirect('/login');
+      await prisma.user.create({
+        data: {
+          firstName: req.body.firstname,
+          lastName: req.body.lastname,
+          email: req.body.email,
+          hash,
+          salt,
+        },
+      });
+      await res.redirect('/login');
     } catch (err) {
       return next(err);
     }

@@ -1,15 +1,17 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
+const { PrismaClient } = require('@prisma/client');
 const { validPassword } = require('../utils/passwordUtils');
-const pool = require('../models/pool');
+
+const prisma = new PrismaClient();
 
 const verifyCallback = async (email, password, done) => {
   try {
-    const { rows } = await pool.query(
-      'SELECT * FROM users WHERE users.email = $1',
-      [email]
-    );
-    const user = rows[0];
+    const user = await prisma.user.findUnique({
+      where: {
+        email,
+      },
+    });
 
     if (!user) {
       return done(null, false, { message: 'incorrect email or password' });
@@ -30,16 +32,16 @@ const strategy = new LocalStrategy(verifyCallback);
 passport.use(strategy);
 
 passport.serializeUser((user, done) => {
-  done(null, user.user_id);
+  done(null, user.id);
 });
 
 passport.deserializeUser(async (userId, done) => {
   try {
-    const { rows } = await pool.query(
-      'SELECT * FROM users WHERE user_id = $1',
-      [userId]
-    );
-    const user = rows[0];
+    const user = await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+    });
 
     done(null, user);
   } catch (err) {

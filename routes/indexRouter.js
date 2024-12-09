@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const { displayMessages } = require('../controllers/indexController');
+const { displayHome } = require('../controllers/indexController');
 
 const indexRouter = Router();
 
@@ -11,7 +11,7 @@ const checkLoggedIn = (req, res, next) => {
   }
 };
 
-indexRouter.get('/', checkLoggedIn, displayMessages);
+indexRouter.get('/', checkLoggedIn, displayHome);
 indexRouter.get('/logout', async (req, res, next) => {
   req.logout((err) => {
     if (err) {

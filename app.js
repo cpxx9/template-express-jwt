@@ -4,16 +4,13 @@ const path = require('node:path');
 const express = require('express');
 const session = require('express-session');
 const passport = require('passport');
-const PgSession = require('connect-pg-simple')(session);
-const pgPool = require('./models/pool');
+const { PrismaSessionStore } = require('@quixo3/prisma-session-store');
+const { PrismaClient } = require('@prisma/client');
 const { indexRouter } = require('./routes/indexRouter');
 const { loginRouter } = require('./routes/loginRouter');
 const { registerRouter } = require('./routes/registerRouter');
-const { joinClubRouter } = require('./routes/joinClubRouter');
 const { notFound } = require('./utils/auth');
 const { errorController } = require('./errors/errorController');
-const { admninsOnlyRouter } = require('./routes/adminsOnlyRouter');
-const { newMessageRouter } = require('./routes/newMessageRouter');
 
 const assetsPath = path.join(__dirname, 'views');
 const app = express();
@@ -26,11 +23,15 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use(
   session({
-    store: new PgSession({ pool: pgPool }),
     secret: process.env.SECRET,
     resave: false,
     saveUninitialized: true,
     cookie: { maxAge: 24 * 60 * 60 * 1000 },
+    store: new PrismaSessionStore(new PrismaClient(), {
+      checkPeriod: 2 * 60 * 1000,
+      dbRecordIdIsSessionId: true,
+      dbRecordIdFunction: undefined,
+    }),
   })
 );
 app.use(passport.session());
@@ -39,9 +40,6 @@ app.use(passport.session());
 app.use('/', indexRouter);
 app.use('/login', loginRouter);
 app.use('/register', registerRouter);
-app.use('/new-message', newMessageRouter);
-app.use('/join-club', joinClubRouter);
-app.use('/admins-only', admninsOnlyRouter);
 app.use('*', notFound);
 app.use(errorController);
 
