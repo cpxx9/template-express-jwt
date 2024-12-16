@@ -37,9 +37,9 @@ app.use(
 app.use(passport.session());
 
 // Routes Here
-app.use('/', indexRouter);
-app.use('/login', loginRouter);
-app.use('/register', registerRouter);
+app.use('/api', indexRouter);
+app.use('/api/users/login', loginRouter);
+app.use('/api/users/register', registerRouter);
 app.use('*', notFound);
 app.use(errorController);
 
