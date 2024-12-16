@@ -12,7 +12,7 @@ const checkIfLoggedIn = asyncHandler(async (req, res, next) => {
     next();
   } else {
     throw new CustomUnauthorizedError(
-      'You are not authorized to view this page'
+      'You are not authorized to view this page, you must log in'
     );
   }
 });

@@ -1,5 +1,5 @@
 const displayHome = async (req, res) => {
-  res.render('index');
+  res.status(200).json({ status: 'success', data: 'index' });
 };
 
 module.exports = {
