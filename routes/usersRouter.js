@@ -4,7 +4,7 @@ const { registerRouter } = require('./registerRouter');
 
 const usersRouter = Router();
 
-usersRouter.get('/login', loginRouter);
-usersRouter.get('/register', registerRouter);
+usersRouter.use('/login', loginRouter);
+usersRouter.use('/register', registerRouter);
 
 module.exports = { usersRouter };
