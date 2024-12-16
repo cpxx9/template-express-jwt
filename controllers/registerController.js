@@ -4,10 +4,6 @@ const { genPassword } = require('../utils/passwordUtils');
 
 const prisma = new PrismaClient();
 
-const displayRegistration = (req, res) => {
-  res.render('register');
-};
-
 const nameAlphaErr = 'must only contain letters.';
 const nameLengthErr = 'must be between 1 and 25 characters.';
 const emailErr = 'Must be a valid email address.';
