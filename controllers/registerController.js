@@ -1,6 +1,6 @@
 const { body, validationResult } = require('express-validator');
 const { PrismaClient } = require('@prisma/client');
-const { genPassword } = require('../utils/passwordUtils');
+const { genPassword, issueJWT } = require('../utils/passwordUtils');
 
 const prisma = new PrismaClient();
 
@@ -52,7 +52,13 @@ const postNewUser = [
           salt,
         },
       });
-      res.json({ success: true, user });
+      const tokenObject = issueJWT(user);
+      res.json({
+        success: true,
+        token: tokenObject.token,
+        expiresIn: tokenObject.expires,
+        user,
+      });
     } catch (err) {
       return next(err);
     }
