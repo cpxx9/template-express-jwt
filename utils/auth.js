@@ -4,7 +4,7 @@ const CustomNotFoundError = require('../errors/CustomNotFoundError');
 const CustomForbiddenError = require('../errors/CustomForbiddenError');
 
 const notFound = asyncHandler(async (req, res, next) => {
-  throw new CustomNotFoundError('This page does not exist');
+  throw new CustomNotFoundError('This api route does not exist');
 });
 
 const checkIfLoggedIn = asyncHandler(async (req, res, next) => {
@@ -12,7 +12,7 @@ const checkIfLoggedIn = asyncHandler(async (req, res, next) => {
     next();
   } else {
     throw new CustomUnauthorizedError(
-      'You are not authorized to view this page, you must log in'
+      'You are not authorized to view this route, you must log in'
     );
   }
 });
@@ -21,7 +21,7 @@ const checkIfAdmin = asyncHandler(async (req, res, next) => {
   if (req.user.admin) {
     next();
   } else {
-    throw new CustomForbiddenError('Only admins can view this page');
+    throw new CustomForbiddenError('Only admins can access this route');
   }
 });
 

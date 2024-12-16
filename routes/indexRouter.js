@@ -1,6 +1,5 @@
 const { Router } = require('express');
 const { displayHome } = require('../controllers/indexController');
-const { checkIfLoggedIn } = require('../utils/auth');
 const { usersRouter } = require('./usersRouter');
 const passport = require('passport');
 
