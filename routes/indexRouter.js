@@ -1,4 +1,6 @@
 const { Router } = require('express');
+const { loginRouter } = require('../routes/loginRouter');
+const { registerRouter } = require('../routes/registerRouter');
 const { displayHome } = require('../controllers/indexController');
 const { checkIfLoggedIn } = require('../utils/auth');
 
@@ -13,6 +15,9 @@ indexRouter.get('/logout', async (req, res, next) => {
     res.redirect('/login');
   });
 });
+
+indexRouter.get('/users/login', loginRouter);
+indexRouter.get('/users/register', registerRouter);
 
 module.exports = {
   indexRouter,
