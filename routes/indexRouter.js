@@ -1,8 +1,7 @@
 const { Router } = require('express');
-const { loginRouter } = require('../routes/loginRouter');
-const { registerRouter } = require('../routes/registerRouter');
 const { displayHome } = require('../controllers/indexController');
 const { checkIfLoggedIn } = require('../utils/auth');
+const { usersRouter } = require('./usersRouter');
 
 const indexRouter = Router();
 
@@ -16,8 +15,7 @@ indexRouter.get('/logout', async (req, res, next) => {
   });
 });
 
-indexRouter.get('/users/login', loginRouter);
-indexRouter.get('/users/register', registerRouter);
+indexRouter.get('/users', usersRouter);
 
 module.exports = {
   indexRouter,
