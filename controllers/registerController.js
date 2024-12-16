@@ -4,10 +4,6 @@ const { genPassword } = require('../utils/passwordUtils');
 
 const prisma = new PrismaClient();
 
-const displayRegistration = (req, res) => {
-  res.render('register');
-};
-
 const nameAlphaErr = 'must only contain letters.';
 const nameLengthErr = 'must be between 1 and 25 characters.';
 const emailErr = 'Must be a valid email address.';
@@ -42,12 +38,12 @@ const postNewUser = [
   async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).render('register', { errors: errors.array() });
+      return res.status(400).json({ success: false, errors: errors.array() });
     }
 
     const { salt, hash } = genPassword(req.body.password);
     try {
-      await prisma.user.create({
+      const user = await prisma.user.create({
         data: {
           firstName: req.body.firstname,
           lastName: req.body.lastname,
@@ -56,7 +52,7 @@ const postNewUser = [
           salt,
         },
       });
-      await res.redirect('/login');
+      res.json({ success: true, user });
     } catch (err) {
       return next(err);
     }
@@ -64,6 +60,5 @@ const postNewUser = [
 ];
 
 module.exports = {
-  displayRegistration,
   postNewUser,
 };
