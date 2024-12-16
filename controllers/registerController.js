@@ -60,6 +60,5 @@ const postNewUser = [
 ];
 
 module.exports = {
-  displayRegistration,
   postNewUser,
 };
