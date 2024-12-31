@@ -23,6 +23,8 @@ model User {
   // comments  Comment[]
 }
 
+// Can use for other models
+
 // model Post {
 //   id        String    @id @default(uuid())
 //   title     String
