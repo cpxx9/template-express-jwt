@@ -1,37 +1,10 @@
-const { body, validationResult } = require('express-validator');
+const { validationResult } = require('express-validator');
 const { PrismaClient } = require('@prisma/client');
 const { genPassword, issueJWT } = require('../utils/passwordUtils');
+const { validateUser } = require('../utils/validations');
+const { prismaErrController } = require('../middleware/errorController');
 
 const prisma = new PrismaClient();
-
-const nameAlphaErr = 'must only contain letters.';
-const nameLengthErr = 'must be between 1 and 25 characters.';
-const emailErr = 'Must be a valid email address.';
-const passLengthErr = 'must be between 8 and 32 characters.';
-const passMatchErr = 'Passwords must match.';
-
-const validateUser = [
-  body('firstname')
-    .trim()
-    .isAlpha()
-    .withMessage(`First name ${nameAlphaErr}`)
-    .isLength({ min: 1, max: 25 })
-    .withMessage(`First name ${nameLengthErr}`),
-  body('lastname')
-    .trim()
-    .isAlpha()
-    .withMessage(`Last name ${nameAlphaErr}`)
-    .isLength({ min: 1, max: 25 })
-    .withMessage(`Last name ${nameLengthErr}`),
-  body('email').trim().isEmail().withMessage(emailErr),
-  body('password')
-    .trim()
-    .isLength({ min: 8, max: 32 })
-    .withMessage(`Password ${passLengthErr}`),
-  body('confirmPassword')
-    .custom((value, { req }) => value === req.body.password)
-    .withMessage(passMatchErr),
-];
 
 const postNewUser = [
   validateUser,
@@ -45,22 +18,42 @@ const postNewUser = [
     try {
       const user = await prisma.user.create({
         data: {
-          firstName: req.body.firstname,
-          lastName: req.body.lastname,
+          username: req.body.username,
           email: req.body.email,
+          firstname: req.body.firstname,
+          lastname: req.body.lastname,
           hash,
           salt,
         },
       });
-      const tokenObject = issueJWT(user);
-      res.json({
+      delete user.hash;
+      delete user.salt;
+      const tokens = await issueJWT(user);
+      const accessTokenObject = tokens.accessToken;
+      const refreshToken = tokens.refreshToken.token.split(' ')[1];
+      res.cookie('jwt', refreshToken, {
+        httpOnly: true,
+        sameSite: 'None',
+        secure: true,
+        maxAge: 24 * 60 * 60 * 1000,
+      });
+      delete user.refresh;
+      await prisma.user.update({
+        where: {
+          username: user.username,
+        },
+        data: {
+          refresh: refreshToken,
+        },
+      });
+      res.status(201).json({
         success: true,
-        token: tokenObject.token,
-        expiresIn: tokenObject.expires,
-        user,
+        token: accessTokenObject.token,
+        expiresIn: accessTokenObject.expires,
       });
     } catch (err) {
-      return next(err);
+      const newErr = prismaErrController(err);
+      return next(newErr);
     }
   },
 ];

@@ -1,6 +1,9 @@
 require('dotenv/config');
+const { PrismaClient } = require('@prisma/client');
 const crypto = require('bcryptjs');
 const jsonwebtoken = require('jsonwebtoken');
+
+const prisma = new PrismaClient();
 
 function validPassword(password, hash, salt) {
   const hashVerify = crypto.hashSync(password, salt);
@@ -17,21 +20,40 @@ function genPassword(password) {
   };
 }
 
-function issueJWT(user) {
-  const id = user.id;
-  const expiresIn = '1d';
+async function issueJWT(user) {
   const payload = {
-    sub: id,
-    iat: Date.now(),
+    sub: user.id,
+    user,
+    iat: Math.floor(Date.now() / 1000),
   };
 
-  const signedToken = jsonwebtoken.sign(payload, process.env.SECRET, {
-    expiresIn: expiresIn,
+  const accessToken = jsonwebtoken.sign(payload, process.env.ACCESS_SECRET, {
+    // change to 10-15m for prod
+    expiresIn: '10m',
+  });
+
+  const refreshToken = jsonwebtoken.sign(payload, process.env.REFRESH_SECRET, {
+    expiresIn: '1d',
+  });
+
+  await prisma.user.update({
+    where: {
+      id: user.id,
+    },
+    data: {
+      refresh: refreshToken,
+    },
   });
 
   return {
-    token: 'Bearer ' + signedToken,
-    expires: expiresIn,
+    accessToken: {
+      token: `Bearer ${accessToken}`,
+      expires: accessToken.expiresIn,
+    },
+    refreshToken: {
+      token: `Bearer ${refreshToken}`,
+      expires: refreshToken.expiresIn,
+    },
   };
 }
 
