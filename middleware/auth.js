@@ -75,7 +75,6 @@ module.exports = {
   // checkIfLoggedIn,
   notFound,
   checkIfAdmin,
-  checkIfAuthor,
   checkIfUserMatch,
   checkUserAuthorMatch,
   checkUserCommentMatch,
